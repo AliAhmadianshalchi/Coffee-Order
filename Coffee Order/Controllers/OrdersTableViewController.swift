@@ -8,38 +8,58 @@
 import UIKit
 
 class OrdersTableViewController: UITableViewController {
+    
+    var orderListViewModel = OrderListViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        populateOrders()
+    }
+    
+    private func populateOrders() {
+        
+        guard let coffeOrdersURL = URL(string: "https://island-bramble.glitch.me/orders") else {
+            fatalError("Incorrect URL")
+        }
+        
+        let resource = Resource<[Order]>(url: coffeOrdersURL)
+        
+        WebService().load(resource: resource) { [weak self] result in
+            print(result)
+            switch result {
+            case .success(let orders):
+                self?.orderListViewModel.ordersViewModel = orders.map(OrderViewModel.init)
+                self?.tableView.reloadData()
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        
+        return self.orderListViewModel.ordersViewModel.count
     }
 
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
 
-        // Configure the cell...
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let vm = self.orderListViewModel.orderViewModel(at: indexPath.row)
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "OrderTableViewCell", for: indexPath)
+
+        cell.textLabel?.text = vm.coffeeName
+        cell.detailTextLabel?.text = vm.size
 
         return cell
     }
-    */
 
     /*
     // Override to support conditional editing of the table view.
