@@ -114,11 +114,21 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Add new order" id="jYd-Cc-IhC">
-                        <barButtonItem key="leftBarButtonItem" title="Close" id="eCL-jO-dOI"/>
-                        <barButtonItem key="rightBarButtonItem" title="Save" id="aaS-lE-jnC"/>
+                        <barButtonItem key="leftBarButtonItem" title="Close" id="eCL-jO-dOI">
+                            <connections>
+                                <action selector="closeButtonPressed:" destination="wkc-oB-SyO" id="CWi-Yz-qye"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Save" id="aaS-lE-jnC">
+                            <connections>
+                                <action selector="saveButtonPressed:" destination="wkc-oB-SyO" id="zjl-ud-kcA"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="nameTextField" destination="9UX-Mt-pt8" id="OOd-xs-ekL"/>
                         <outlet property="tableView" destination="BsU-H0-oW9" id="Sbr-fw-Bt1"/>
+                        <outlet property="totalTextField" destination="fZR-cu-K6u" id="Vm2-4w-r2d"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rWu-jg-ec0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

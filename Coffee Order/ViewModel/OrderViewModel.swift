@@ -28,7 +28,7 @@ struct OrderViewModel {
         return self.order.name
     }
     
-    var total: Double {
+    var total: String {
         return self.order.total
     }
     

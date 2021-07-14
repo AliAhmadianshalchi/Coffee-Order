@@ -12,6 +12,8 @@ class AddOrderViewController: UIViewController, UITableViewDelegate , UITableVie
     private var vm = AddCoffeeOrderViewModel()
     private var coffeeSizesSegmentedControl: UISegmentedControl!
 
+    @IBOutlet weak var totalTextField: UITextField!
+    @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
@@ -21,6 +23,27 @@ class AddOrderViewController: UIViewController, UITableViewDelegate , UITableVie
         self.tableView.dataSource = self
         
         setupUI()
+        
+    }
+    
+    @IBAction func saveButtonPressed(_ sender: UIBarButtonItem) {
+        
+        let name = self.nameTextField.text
+        let total = self.totalTextField.text
+        let selectedSize = self.coffeeSizesSegmentedControl.titleForSegment(at: self.coffeeSizesSegmentedControl.selectedSegmentIndex)
+        
+        guard let indexPath = self.tableView.indexPathForSelectedRow else {
+            fatalError("Error in selecting Coffee!")
+        }
+        
+        self.vm.name = name
+        self.vm.total = total
+        
+        self.vm.selectedType = self.vm.coffeeName[indexPath.row]
+        self.vm.selectedSize = selectedSize
+    }
+    
+    @IBAction func closeButtonPressed(_ sender: UIBarButtonItem) {
         
     }
     
@@ -44,6 +67,14 @@ class AddOrderViewController: UIViewController, UITableViewDelegate , UITableVie
         
         cell.textLabel?.text = self.vm.coffeeName[indexPath.row]
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        tableView.cellForRow(at: indexPath)?.accessoryType = .none
     }
 
     
