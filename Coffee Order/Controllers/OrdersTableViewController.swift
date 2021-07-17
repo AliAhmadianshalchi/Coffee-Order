@@ -19,13 +19,7 @@ class OrdersTableViewController: UITableViewController {
     
     private func populateOrders() {
         
-        guard let coffeOrdersURL = URL(string: "https://island-bramble.glitch.me/orders") else {
-            fatalError("Incorrect URL")
-        }
-        
-        let resource = Resource<[Order]>(url: coffeOrdersURL)
-        
-        WebService().load(resource: resource) { [weak self] result in
+        WebService().load(resource: Order.all) { [weak self] result in
             print(result)
             switch result {
             case .success(let orders):

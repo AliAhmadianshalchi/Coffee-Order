@@ -41,10 +41,22 @@ class AddOrderViewController: UIViewController, UITableViewDelegate , UITableVie
         
         self.vm.selectedType = self.vm.coffeeName[indexPath.row]
         self.vm.selectedSize = selectedSize
+        
+        WebService().load(resource: Order.create(vm: self.vm)) { result in
+            
+            switch result {
+            case .success(let order):
+                print(order)
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+        self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func closeButtonPressed(_ sender: UIBarButtonItem) {
-        
+        self.dismiss(animated: true, completion: nil)
     }
     
     private func setupUI() {
