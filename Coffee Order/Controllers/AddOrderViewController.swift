@@ -7,8 +7,14 @@
 import Foundation
 import UIKit
 
+protocol addCoffeeOrderDelegate {
+    func addCoffeeOrderViewControllerDidSave(order: Order, controller: UIViewController)
+    func addCoffeeOrderViewControllerDidClose(controller: UIViewController)
+}
+
 class AddOrderViewController: UIViewController, UITableViewDelegate , UITableViewDataSource {
     
+    var delegate: addCoffeeOrderDelegate!
     private var vm = AddCoffeeOrderViewModel()
     private var coffeeSizesSegmentedControl: UISegmentedControl!
 
@@ -46,7 +52,13 @@ class AddOrderViewController: UIViewController, UITableViewDelegate , UITableVie
             
             switch result {
             case .success(let order):
-                print(order)
+                
+                if let order = order , let delegate = self.delegate {
+                    DispatchQueue.main.async {
+                        delegate.addCoffeeOrderViewControllerDidSave(order: order, controller: self)
+                    }
+                }
+                
             case .failure(let error):
                 print(error)
             }
@@ -56,6 +68,11 @@ class AddOrderViewController: UIViewController, UITableViewDelegate , UITableVie
     }
     
     @IBAction func closeButtonPressed(_ sender: UIBarButtonItem) {
+        
+        if let delegate = self.delegate {
+            delegate.addCoffeeOrderViewControllerDidClose(controller: self)
+        }
+        
         self.dismiss(animated: true, completion: nil)
     }
     
